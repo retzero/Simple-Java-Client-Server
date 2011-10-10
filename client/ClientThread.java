@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 public class ClientThread extends Thread {
 	int menuSelection;
 	String hostName;
-	private static Socket socket = null;
+	private Socket socket = null;
 	int threadNum;
 
 	ClientThread(String hostName, int menuSelection, int threadNum) {
@@ -52,8 +52,6 @@ public class ClientThread extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                out.close();
-                in.close();
                 socket.close();
 
         }
