@@ -35,10 +35,7 @@ public class ClientThread extends Thread {
 			System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
 	
 			// send the command to the server
-			for (int i = 0; i < 25; i++) {
-				out.println(Integer.toString(menuSelection));
-				out.flush();
-			}
+			out.println(Integer.toString(menuSelection));
 			System.out.println("Sent output");
 
 			// read the command from the server
