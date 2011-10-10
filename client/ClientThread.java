@@ -56,7 +56,12 @@ public class ClientThread extends Thread {
 		}
 		finally {
 			System.out.println("closing");
-			socket.close();
+			try {
+				socket.close();
+			}
+			catch (IOException e ) {
+				System.out.println("Couldn't close socket");
+			}
 		}
 		
 	}
