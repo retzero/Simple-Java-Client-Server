@@ -23,21 +23,20 @@ public class ServerThread extends Thread {
 
 			String inString;
 		        while  ((inString = in.readLine()) == null);
-				System.out.println("Read command " + inString);
+			System.out.println("Read command " + inString);
 
-				String outString = CommandExecutor.run(inString);
-				System.out.println("Server sending: " + outString);
-				out.print(outString);
-			out.flush();
-
+			String outString = CommandExecutor.run(inString);
+			System.out.println("Server sending: " + outString);
+			out.print(outString);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		} 
+		finally {
 			out.close();
 			in.close();
 			client.close();
 			System.out.println("Output closed.");
-
-		}
-		catch (IOException e) {
-			e.printStackTrace();
 		}
 
 	}
