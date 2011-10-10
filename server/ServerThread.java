@@ -21,7 +21,8 @@ public class ServerThread extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			System.out.print("Reader and writer created. ");
 
-			String inString = in.readLine();
+			String inString;
+		        while  ((inString = in.readLine()) == null);
 				System.out.println("Read command " + inString);
 
 				String outString = CommandExecutor.run(inString);

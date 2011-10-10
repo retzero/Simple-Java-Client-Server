@@ -44,7 +44,7 @@ public class Client
         	for (int i = 0; i < 30; i++) {
         		// make a new thread, tell it the hostname to connect to
         		// and the command to run
-        		thrd = new Thread(new ClientThread(hostName, menuSelection));
+        		thrd = new Thread(new ClientThread(hostName, menuSelection, i));
         		thrd.start(); // start the thread
         		list.add(thrd); // add the thread to the end of the linked list
         		

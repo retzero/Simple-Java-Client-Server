@@ -10,10 +10,12 @@ public class ClientThread extends Thread {
 	int menuSelection;
 	String hostName;
 	private static Socket socket = null;
-	
-	ClientThread(String hostName, int menuSelection) {
+	int threadNum;
+
+	ClientThread(String hostName, int menuSelection, int threadNum) {
 		this.menuSelection = menuSelection;
 		this.hostName = hostName;
+		this.threadNum = threadNum;
 	}
 
 	public void run() {
@@ -33,14 +35,15 @@ public class ClientThread extends Thread {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
                 // send the command to the server
-                out.println(Integer.toString(menuSelection));
-                out.flush();
+                for (int i = 0; i < 25; i++) {
+			out.println(Integer.toString(menuSelection));
+			out.flush();
+		}
                 System.out.println("Sent output");
                 // read the command from the server
                 String outputString = "hi";
                 while (((outputString = in.readLine()) != null) && (!outputString.equals("END_MESSAGE"))) {
-                        System.out.println(outputString);
-                        System.out.println("Input read");
+                        System.out.println(threadNum + " " + outputString);
                 }
                 System.out.println("closing");
                 try {
