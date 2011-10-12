@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ServerThread extends Thread {
 	Socket client = null;
+	PrintWriter output;
+	BufferedReader input;
 	
 	public ServerThread(Socket client) {
 		this.client = client;
@@ -22,31 +24,35 @@ public class ServerThread extends Thread {
 
 		try {
 			// open a new PrintWriter and BufferedReader on the socket
-			PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			output = new PrintWriter(client.getOutputStream(), true);
+			input = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			System.out.print("Reader and writer created. ");
 
 			String inString;
 			// read the command from the client
-		        while  ((inString = in.readLine()) == null);
+		        while  ((inString = input.readLine()) == null);
 			System.out.println("Read command " + inString);
 
 			// run the command using CommandExecutor and get its output
 			String outString = CommandExecutor.run(inString);
 			System.out.println("Server sending: " + outString);
 			// send the result of the command to the client
-			out.print(outString);
+			output.println(outString);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		} 
 		finally {
 			// close the connection to the client
-			out.close();
-			in.close();
-			client.close();
+			try {
+				client.close();
+			}
+			catch (IOException e) {
+				e.printStackTrace();	
+			}			
 			System.out.println("Output closed.");
 		}
 
 	}
 }
+

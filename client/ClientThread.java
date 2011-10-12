@@ -26,7 +26,7 @@ public class ClientThread extends Thread {
 	AtomicLong runningThreads;
 
 	// each class is passed false for printOutput if the number of threads started is > 1. When running more
-	// than one client thread the clientThreads should not print output, in order to not clutter the screen
+	// than one client thread the clientThreads should not print output, input order to not clutter the screen
 	boolean printOutput;
 
 	// startTime and endTime are used to keep track of the current time when the thread conects to the 
@@ -45,7 +45,7 @@ public class ClientThread extends Thread {
 
 	public void run() {
 		PrintWriter out = null;
-		BufferedReader in = null;
+		BufferedReader input = null;
 		try {
 			// get the current time (before connecting to the server)
 			startTime = System.currentTimeMillis();
@@ -54,12 +54,14 @@ public class ClientThread extends Thread {
 			//Establishes the socket connection between the client & server
 			//name of the machine & the port number to which we want to connect
 			socket = new Socket(hostName, 4000);
-			if (printOutput) System.out.print("Establishing connection.");
-			//opens a PrintWriter on the socket in autoflush mode
+			if (printOutput) {
+				System.out.print("Establishing connection.");
+			}
+			//opens a PrintWriter on the socket input autoflush mode
 			out = new PrintWriter(socket.getOutputStream(), true);
 
 			//opens a BufferedReader on the socket
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			if (printOutput) System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
 
 			// send the command to the server
@@ -67,8 +69,8 @@ public class ClientThread extends Thread {
 			if (printOutput) System.out.println("Sent output");
 
 			// read the output from the server
-			String outputString = "";
-			while (((outputString = in.readLine()) != null) && (!outputString.equals("END_MESSAGE"))) {
+			String outputString;
+			while (((outputString = input.readLine()) != null) && (!outputString.equals("END_MESSAGE"))) {
 				if (printOutput) System.out.println(outputString);
 			}
 
