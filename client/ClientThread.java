@@ -4,45 +4,59 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class ClientThread extends Thread {
 	int menuSelection;
 	String hostName;
-	private Socket socket = null;
-	int threadNum;
+	Socket socket = null;
+	AtomicLong totalTime;
+	AtomicLong runningThreads;
+	boolean printOutput;
 
-	ClientThread(String hostName, int menuSelection, int threadNum) {
+	long startTime;
+	long endTime;
+
+	ClientThread(String hostName, int menuSelection, AtomicLong totalTime, boolean printOutput, AtomicLong runningThreads) {
 		this.menuSelection = menuSelection;
 		this.hostName = hostName;
-		this.threadNum = threadNum;
+		this.totalTime = totalTime;
+		this.printOutput = printOutput;
+		this.runningThreads = runningThreads;
 	}
 
 	public void run() {
 		PrintWriter out = null;
 		BufferedReader in = null;
 		try {
+			startTime = System.currentTimeMillis();
+
 			//creates a new Socket object and names it socket.
 			//Establishes the socket connection between the client & server
 			//name of the machine & the port number to which we want to connect
 			socket = new Socket(hostName, 4000);
-			System.out.print("Establishing connection.");            
-			out = new PrintWriter(socket.getOutputStream(), true);//opens a PrintWriter 
-										//on the socket
+			if (printOutput) System.out.print("Establishing connection.");
+			//opens a PrintWriter on the socket in autoflush mode
+			out = new PrintWriter(socket.getOutputStream(), true);
 
 			//opens a BufferedReader on the socket
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
-	
+			if (printOutput) System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
+
 			// send the command to the server
 			out.println(Integer.toString(menuSelection));
-			System.out.println("Sent output");
+			if (printOutput) System.out.println("Sent output");
 
-			// read the command from the server
+			// read the output from the server
 			String outputString = "";
 			while (((outputString = in.readLine()) != null) && (!outputString.equals("END_MESSAGE"))) {
-				System.out.println(threadNum + " " + outputString);
+				if (printOutput) System.out.println(outputString);
 			}
+
+			endTime = System.currentTimeMillis();
+			totalTime.addAndGet(endTime - startTime);
+
 		}
 		catch (UnknownHostException e) {
 			System.err.println("Unknown host: " + e);
@@ -52,15 +66,17 @@ public class ClientThread extends Thread {
 			e.printStackTrace();
 		}
 		finally {
-			System.out.println("closing");
+			if (printOutput) System.out.println("closing");
 			try {
 				socket.close();
+				runningThreads.decrementAndGet();
+				System.out.flush();
 			}
 			catch (IOException e ) {
 				System.out.println("Couldn't close socket");
 			}
 		}
-		
+
 	}
 
 }
