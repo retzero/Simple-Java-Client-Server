@@ -8,78 +8,83 @@ import java.io.InputStreamReader;
  * then executing it and returning the results.
  */
 public class CommandExecutor {
-	
+
 	/**
 	 * Runs the shell command after first using parseCommand() to determine which
 	 * command to run.
 	 * 
 	 * @param commandString		A string containing a single digit, 1-6;
-	 * @return					A string containing the results of the shell command.
+	 * @return			A string containing the results of the shell command.
 	 */
 	static String run(String commandString) {
 		String result = "";
 		String line;
 		try {
-		    Process child = Runtime.getRuntime().exec(parseCommand(commandString));
+			// start the shell command running as a child processes
+			Process child = Runtime.getRuntime().exec(parseCommand(commandString));
 
-		    BufferedReader output = new BufferedReader(new InputStreamReader(child.getInputStream()));
-		    while ((line = output.readLine()) != null) {
-		    	result = result.concat(line);
+			// open a BufferedReader to read the output of the child process
+			BufferedReader output = new BufferedReader(new InputStreamReader(child.getInputStream()));
+			// while the child process is still outputting, add the output to the result string
+			while ((line = output.readLine()) != null) {
+				result = result.concat(line);
+				result = result.concat("\n");
+			}
+
 			result = result.concat("\n");
-		    }
-		    
-		result = result.concat("\n");
-		result = result.concat("END_MESSAGE");
-		    output.close();
-		    
+			// add "END_MESSAGE" to the result string. When the client sees END_MESSAGE it
+			// will know that the server is done sending
+			result = result.concat("END_MESSAGE");
+			output.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Converts the digit string into its respective shell command.
 	 * 
 	 * @param inputString		A string containing a single digit, 1-6;
-	 * @return					
+	 * @return			A string containing the shell command to run		
 	 */
 	static String parseCommand(String inputString) {
 		int inputInt = Integer.parseInt(inputString);
 		String commandString = "";
 		switch (inputInt) {
-		// Date
-		case 1:
-			commandString = "date";
-			break;
-			
-		// Uptime
-		case 2:
-			commandString = "uptime";
-			break;
-		
-		// Memory use
-		case 3:
-			commandString = "free";
-			break;
-			
-		// netstat
-		case 4:
-			commandString = "netstat";
-			break;
-			
-		// current users
-		case 5:
-			commandString = "who";
-			break;
-			
-		// running processes
-		case 6:
-			commandString = "ps -e";
-			break;
+			// Date
+			case 1:
+				commandString = "date";
+				break;
+
+				// Uptime
+			case 2:
+				commandString = "uptime";
+				break;
+
+				// Memory use
+			case 3:
+				commandString = "free";
+				break;
+
+				// netstat
+			case 4:
+				commandString = "netstat";
+				break;
+
+				// current users
+			case 5:
+				commandString = "who";
+				break;
+
+				// running processes
+			case 6:
+				commandString = "ps -e";
+				break;
 		}
-		
+
 		return commandString;
 	}
 }

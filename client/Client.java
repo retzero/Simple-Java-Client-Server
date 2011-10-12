@@ -19,7 +19,7 @@ public class Client {
 	// multiple threads. Here it is used for benchmarking, to store the sum
 	// of the command completion times for all threads
 	private static AtomicLong totalTime = new AtomicLong(0);
-	
+
 	// this AtomicLong is used to keep track of the current # of running threads
 	private static AtomicLong runningThreads = new AtomicLong(0);
 
@@ -77,7 +77,8 @@ public class Client {
 					e.printStackTrace();
 				}
 			}
-
+			// while runningThreads is not 0, there are still clients waiting for the server
+			// to send a response, so keep looping (waiting) until they are finished
 			while (runningThreads.get() != 0) {}
 
 			System.out.println("Average response time: " + (totalTime.get() / numProcesses) + " ms\n");
@@ -86,13 +87,18 @@ public class Client {
 
 	}
 	//----------------------------------------------------------------------------
+	/**
+	* Function to prompt the user for a command to run
+	* @return command number 1-8
+	*/
 	public static int mainMenu() {
 		int menuSelection = 0;
+		// loop (and prompt again) until the user's input is an integer between 1 and 8
 		while ((menuSelection <= 0) || (menuSelection > 8)) {
 			System.out.println("The menu provides the following choices to the user: ");
 			System.out.println("1. Host current Date and Time \n2. Host uptime\n"
 					+ "3. Host memory use \n4. Host Netstat \n5. Host current users "
-					+ "\n6. Host running processes \n7. Benchmark\n8. Quit ");
+					+ "\n6. Host running processes \n7. Benchmark (measure mean response time)\n8. Quit ");
 			System.out.print("Please provide number corresponding to the action you want to be performed: ");
 			Scanner sc = new Scanner(System.in);
 			if (sc.hasNextInt()) menuSelection = sc.nextInt();
@@ -100,8 +106,13 @@ public class Client {
 		return menuSelection;
 	}
 
+	/**
+	* Function to prompt the user for a benchmark command to run
+	* @return command number 1-6
+	*/
 	public static int benchmarkMenu() {
 		int menuSelection = 0;
+		// loop (and prompt again) until the user's input is an integer between 1 and 6
 		while ((menuSelection <= 0) || (menuSelection > 6)) {
 			System.out.println("Which command would you like to benchmark? ");
 			System.out.println("1. Host current Date and Time \n2. Host uptime\n"
@@ -114,8 +125,13 @@ public class Client {
 		return menuSelection;
 	}   
 
+	/**
+	* Function to prompt the user for how many connections to make (for measuring the mean response time)
+	* @return number 1-100
+	*/
 	public static int numProcessesMenu() {
 		int menuSelection = 0;
+		// loop (and prompt again) until the user's input is an integer between 1 and 100
 		while ((menuSelection <= 0) || (menuSelection > 100)) {
 			System.out.print("How many connections to the server would you like to open? [1-100]: ");
 			Scanner sc = new Scanner(System.in);
