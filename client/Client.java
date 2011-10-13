@@ -25,7 +25,7 @@ public class Client {
 
 	// this AtomicLong is used to keep track of the current # of running threads
 	private static AtomicLong runningThreads = new AtomicLong(0);
-	private static boolean printOutput = false;
+	private static boolean printOutput = true;
 
 	public static void main(String[] args) {
 		int menuSelection = 0;
@@ -51,7 +51,7 @@ public class Client {
 			// if 7, ask which command should be run in the benchmark mode
 			// and how many connections to create
 			if (menuSelection == 7) {
-				printOutput = true;
+				printOutput = false;
 				menuSelection = benchmarkMenu();
 				numProcesses = numProcessesMenu();
 			}
