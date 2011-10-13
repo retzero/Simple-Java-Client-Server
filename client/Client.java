@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Ikonija Bogojevic
  * @author Sandra Weber
  * @author Miguel Perez
+ *
+ * This is the main Client class, which spawns ClientThreads which connect to the server. This class
+ * includes methods for obtaining the user's commands and validating them.
  */
 public class Client {
 	private static String hostName;

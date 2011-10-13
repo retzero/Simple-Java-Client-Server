@@ -81,7 +81,7 @@ public class ClientThread extends Thread {
 
 		}
 		catch (UnknownHostException e) {
-			System.err.println("Unknown host: " + e);
+			System.err.println("Unknown host: " + hostName);
 			System.exit(1);
 		}
 		catch (IOException e) {
