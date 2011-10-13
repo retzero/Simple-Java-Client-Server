@@ -84,6 +84,10 @@ public class ClientThread extends Thread {
 			System.err.println("Unknown host: " + hostName);
 			System.exit(1);
 		}
+		catch (ConnectException e) {
+			System.err.println("Connection refused by host: " + hostName);
+			System.exit(1);
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
