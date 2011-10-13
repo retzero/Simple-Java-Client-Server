@@ -35,7 +35,7 @@ public class ServerThread extends Thread {
 
 			// run the command using CommandExecutor and get its output
 			String outString = CommandExecutor.run(inString);
-			System.out.println("Server sending: " + outString);
+			System.out.println("Server sending result to client");
 			// send the result of the command to the client
 			output.println(outString);
 		}
