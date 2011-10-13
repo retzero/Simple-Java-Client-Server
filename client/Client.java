@@ -25,6 +25,7 @@ public class Client {
 
 	// this AtomicLong is used to keep track of the current # of running threads
 	private static AtomicLong runningThreads = new AtomicLong(0);
+	private static boolean benchmark = false;
 
 	public static void main(String[] args) {
 		int menuSelection = 0;
@@ -50,6 +51,7 @@ public class Client {
 			// if 7, ask which command should be run in the benchmark mode
 			// and how many connections to create
 			if (menuSelection == 7) {
+				benchmark = true;
 				menuSelection = benchmarkMenu();
 				numProcesses = numProcessesMenu();
 			}
@@ -62,7 +64,7 @@ public class Client {
 				// make a new thread, tell it the hostname to connect to
 				// and the command to run. It is also passed the totalTime object,
 				// so it can record how much time its command took to complete
-				thrd = new Thread(new ClientThread(args[0], menuSelection, totalTime, (numProcesses == 1), runningThreads));
+				thrd = new Thread(new ClientThread(args[0], menuSelection, totalTime, benchmark, runningThreads));
 				thrd.start(); // start the thread
 				list.add(thrd); // add the thread to the end of the linked list
 

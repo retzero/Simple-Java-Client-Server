@@ -48,9 +48,6 @@ public class ClientThread extends Thread {
 		PrintWriter out = null;
 		BufferedReader input = null;
 		try {
-			// get the current time (before connecting to the server)
-			startTime = System.currentTimeMillis();
-
 			//creates a new Socket object and names it socket.
 			//Establishes the socket connection between the client & server
 			//name of the machine & the port number to which we want to connect
@@ -64,6 +61,9 @@ public class ClientThread extends Thread {
 			//opens a BufferedReader on the socket
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			if (printOutput) System.out.println("\nRequesting output for the '" + menuSelection + "' command from " + hostName);
+			
+			// get the current time (before sending the request to the server)
+			startTime = System.currentTimeMillis();
 
 			// send the command to the server
 			out.println(Integer.toString(menuSelection));
