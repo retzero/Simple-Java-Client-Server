@@ -88,6 +88,7 @@ public class Client {
 
 			System.out.println("Average response time: " + (totalTime.get() / numProcesses) + " ms\n");
 			numProcesses = 1;
+			printOutput = true;
 		}
 
 	}
