@@ -20,9 +20,9 @@ public class Server {
 		ArrayList<Thread> list = new ArrayList<Thread>();
 		
 		try {
-			// listen for incoming connections on port 4000
-			ServerSocket socket = new ServerSocket(4000);
-			System.out.println("Server listening on port 4000");
+			// listen for incoming connections on port 15432
+			ServerSocket socket = new ServerSocket(15432);
+			System.out.println("Server listening on port 15432");
 
 			// loop (forever) until program is stopped
 			while(true) {

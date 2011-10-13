@@ -51,7 +51,7 @@ public class ClientThread extends Thread {
 			//creates a new Socket object and names it socket.
 			//Establishes the socket connection between the client & server
 			//name of the machine & the port number to which we want to connect
-			socket = new Socket(hostName, 4000);
+			socket = new Socket(hostName, 15432);
 			if (printOutput) {
 				System.out.print("Establishing connection.");
 			}
